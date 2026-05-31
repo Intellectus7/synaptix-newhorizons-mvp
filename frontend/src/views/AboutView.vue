@@ -1,0 +1,228 @@
+<script setup>
+import { RouterLink } from 'vue-router';
+import { ref, onMounted, computed } from 'vue'
+import { marked } from 'marked';
+
+const aboutContent = ref('');
+const aboutText = ref('');
+const renderedHTML = ref('');
+
+
+onMounted(async() => {
+  aboutContent.value = `  #   About Synaptix
+
+## Build AI Personalities With Powers
+
+Synaptix is a platform where users create digital entities with personalities, memories, skills, and workflows.
+
+Instead of simply chatting with AI, users design characters that can think, create, assist, and evolve.
+
+We believe the future of AI is not just conversation.
+
+It is identity, creativity, utility, and interaction.
+
+---
+
+# The Vision
+
+Most AI platforms stop at messaging.
+
+You type.
+The AI responds.
+The interaction ends.
+
+Synaptix pushes beyond that.
+
+We want users to create AI personalities that:
+
+* feel unique,
+* behave consistently,
+* perform useful actions,
+* and become part of shared digital ecosystems.
+
+A Synaptix bot is not just a chatbot.
+
+It is a customizable digital entity.
+
+Users can shape:
+
+* personality,
+* speaking style,
+* interests,
+* expertise,
+* lore,
+* memory,
+* workflows,
+* and abilities.
+
+Some bots may become tutors.
+Some become storytellers.
+Some become productivity systems.
+Some become entire fictional characters with worlds and histories.
+
+---
+
+# AI With Skills
+
+Personality alone is not enough anymore.
+
+Modern users want AI that can actually do things.
+
+That is why Synaptix introduces skills.
+
+Bots can:
+
+* generate PDFs,
+* summarize notes,
+* create quizzes,
+* explain concepts,
+* generate stories,
+* build flashcards,
+* write code,
+* organize study plans,
+* and much more.
+
+Users can even combine multiple skills into workflows.
+
+For example:
+
+Upload Notes
+→ Summarize
+→ Generate Flashcards
+→ Create Quiz
+→ Export PDF
+
+This transforms AI from:
+
+> “something you talk to”
+
+into:
+
+> “something you build with.”
+
+---
+
+# Create Original Characters
+
+Users can design completely original AI entities.
+
+Examples include:
+
+* fantasy guides,
+* anime-inspired personalities,
+* sci-fi commanders,
+* historians,
+* mentors,
+* chaotic meme bots,
+* roleplay characters,
+* and educational assistants.
+
+Each character can have:
+
+* backstories,
+* relationships,
+* world lore,
+* unique speech styles,
+* and customizable behavior.
+
+The goal is to make AI feel expressive and alive.
+
+---
+
+# Inspired Personas
+
+Synaptix also allows users to create personalities inspired by real-world traits and behaviors.
+
+Rather than exact cloning, users can build AI personas inspired by:
+
+* communication styles,
+* energy,
+* humor,
+* interests,
+* and personality patterns.
+
+This allows users to create AI companions and assistants that feel familiar while remaining creative and transformative.
+
+---
+
+# Shared Ecosystems
+
+Synaptix is built around sharing and remixing.
+
+Users can:
+
+* publish bots publicly,
+* share conversations,
+* fork existing bots,
+* remix workflows,
+* and collaborate creatively.
+
+A bot can evolve over time through community iteration.
+
+This creates an ecosystem where users are not just consumers of AI.
+
+They become creators.
+
+---
+
+# Why Synaptix Exists
+
+The world is becoming saturated with generic chatbot experiences.
+
+We believe the next generation of AI platforms will focus on:
+
+* personalization,
+* creation,
+* identity,
+* interaction,
+* and user-generated systems.
+
+Synaptix exists to explore that future.
+
+Not just AI assistants.
+
+Not just messaging.
+
+But customizable digital entities with personalities and capabilities.
+
+---
+
+# The Future
+
+The long-term vision for Synaptix includes:
+
+* voice personalities,
+* collaborative AI worlds,
+* advanced workflow systems,
+* creator marketplaces,
+* multiplayer AI ecosystems,
+* and deeply customizable digital companions.
+
+We are building toward a future where users do not merely use AI.
+
+They build with it.`
+  console.log(aboutContent.value)
+  aboutText.value = aboutContent.value;  
+  renderedHTML.value = marked.parse(aboutText.value)
+  console.log(renderedHTML.value)
+})
+
+
+
+</script>
+
+<template>
+  <div v-html="renderedHTML" class="flex flex-col hero-subtitle m-w-screen">
+  </div>
+  <div><RouterLink to="/docs"><button class="btn">See the docs</button></RouterLink></div>
+</template>
+
+<style>
+@media (min-width: 1024px) {
+  .about {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+}
+</style>
