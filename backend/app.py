@@ -395,7 +395,11 @@ def handle_join_chat(data):
 @socketio.on('send_msg')
 def handle_send_message(data):
 
-    NEXUS_ID = 14
+    nexus = User.query.filter_by(
+        username="Nexus"
+    ).first()
+    
+    NEXUS_ID = nexus.id if nexus else 2
 
     sender_id = connected_users.get(
         request.sid
