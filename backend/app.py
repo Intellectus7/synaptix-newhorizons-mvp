@@ -563,5 +563,6 @@ def handle_exception(e):
 
 
 if __name__ == "__main__":
-    socketio.run(app, port=port, debug=False)    
+    # allow_unsafe_werkzeug=True prevents crashes if gevent/eventlet isn't picking it up
+    socketio.run(app, host="0.0.0.0", port=port, debug=False, allow_unsafe_werkzeug=True)
  
