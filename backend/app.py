@@ -20,7 +20,7 @@ from .models.bot_model import BotB
 from .models.group_model import Group
 from .models.msg_model import Message
 from .bots.Nexus.organizer import nexus_chat
-from dotenv import load_dotenv()
+from dotenv import load_dotenv
 connected_users = {}
 
 from datetime import timedelta
