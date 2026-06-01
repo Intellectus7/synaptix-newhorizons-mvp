@@ -26,7 +26,7 @@ connected_users = {}
 from datetime import timedelta
 
 app = Flask(__name__)
-ALLOWED_ORIGINS = ["http://localhost:5173"]
+ALLOWED_ORIGINS = ["http://localhost:5173", "https://syncaptix-node.surge.sh"]
 GET, POST, PUT, DELETE = "GET", "POST", "PUT", "DELETE"
 CORS(app, supports_credentials=True, origins=ALLOWED_ORIGINS)
 app.config["SECRET_KEY"] = "mySdiscn9w98eu3"
