@@ -20,7 +20,7 @@ from .models.bot_model import BotB
 from .models.group_model import Group
 from .models.msg_model import Message
 from .bots.Nexus.organizer import nexus_chat
-
+from dotenv import load_dotenv()
 connected_users = {}
 
 from datetime import timedelta
@@ -42,8 +42,8 @@ app.config['JWT_HEADER_NAME'] = 'Authorization'
 app.config['JWT_HEADER_TYPE'] = 'Bearer'
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 db.init_app(app)
-
-
+load_dotenv()
+port = int(os.environ.get("PORT", 5000))
 
 with app.app_context():
     db.create_all()
@@ -562,5 +562,6 @@ def handle_exception(e):
 
 
 if __name__ == "__main__":
-    socketio.run(app, port=5000, debug=True)
+    
+    socketio.run(app, port=port, debug=True)
  
