@@ -562,6 +562,6 @@ def handle_exception(e):
 
 
 if __name__ == "__main__":
-    
+    socketio.run(app, port=port, debug=False)    
     socketio.run(app, port=port, debug=True)
  
