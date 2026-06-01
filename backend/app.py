@@ -32,7 +32,8 @@ CORS(app, supports_credentials=True, origins=ALLOWED_ORIGINS)
 app.config["SECRET_KEY"] = "mySdiscn9w98eu3"
 socketio = SocketIO(app, cors_allowed_origins=ALLOWED_ORIGINS)
 app.config['JWT_SECRET_KEY'] = 'fgvf5t535657777b7ub767u3_6jyttqqt6535y7j5ukn7in9653wg6gw5yy4unuj4m7667'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chatnow.db'
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(BASE_DIR, 'database.db')}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=300)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=700)
