@@ -24,7 +24,7 @@ from dotenv import load_dotenv
 connected_users = {}
 
 from datetime import timedelta
-
+load_dotenv()
 app = Flask(__name__)
 ALLOWED_ORIGINS = ["http://localhost:5173", "https://syncaptix-node.surge.sh"]
 GET, POST, PUT, DELETE = "GET", "POST", "PUT", "DELETE"
@@ -33,7 +33,10 @@ app.config["SECRET_KEY"] = "mySdiscn9w98eu3"
 socketio = SocketIO(app, cors_allowed_origins=ALLOWED_ORIGINS)
 app.config['JWT_SECRET_KEY'] = 'fgvf5t535657777b7ub767u3_6jyttqqt6535y7j5ukn7in9653wg6gw5yy4unuj4m7667'
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(BASE_DIR, 'database.db')}"
+uri = os.environ.get("DATABASE_URL")
+if uri and uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=300)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=700)
@@ -43,7 +46,6 @@ app.config['JWT_HEADER_NAME'] = 'Authorization'
 app.config['JWT_HEADER_TYPE'] = 'Bearer'
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 db.init_app(app)
-load_dotenv()
 port = int(os.environ.get("PORT", 5000))
 
 with app.app_context():
@@ -489,7 +491,22 @@ def handle_send_message(data):
     print("BOT TRIGGERED")
 
     try:
+        # Recent messages
+        recent_messages = Message.query.filter(
+            or_(
+                (Message.sender_id == sender_id) & (Message.receiver_id == receiver_id),
+                (Message.sender_id == receiver_id) & (Message.receiver_id == sender_id)
+            )
+        ).order_by(Message.timestamp.desc()).limit(11).all() # Fetch newest 10 first
+        recent_messages = recent_messages[1:]
+        # Reverse them so they read in chronological order (oldest to newest)
+        recent_messages.reverse()
 
+        # Build a plain-text history ledger for your AI function
+        history_string = ""
+        for msg in recent_messages:
+            speaker = "User" if msg.sender_id == sender_id else "Bot"
+            history_string += f"{speaker}: {msg.content}\n"
         # ----------------------------------------
         # Generate AI answer
         # ----------------------------------------
@@ -498,16 +515,16 @@ def handle_send_message(data):
 
             answer = nexus_chat(
                 content,
-                "No history for now"
+                f"Recent history:\n{history_string}\n"
             )
 
             bot_sender_id = NEXUS_ID
 
         else:
-
+            combined_prompt = f"\n{custom_bot.system_prompt}\n Recent History: {history_string}"
             answer = nexus_chat(
                 content,
-                custom_bot.system_prompt
+                combined_prompt
             )
 
             bot_sender_id = receiver_id
