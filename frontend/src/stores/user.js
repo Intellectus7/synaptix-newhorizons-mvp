@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
-const BASE_URL = 'http://localhost:5000'
+const BASE_URL = 'https://synaptix-newhorizons-mvp.onrender.com'
 const router = useRouter();
 const contactList = ref([]);
 
