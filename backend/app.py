@@ -575,6 +575,15 @@ def handle_send_message(data):
     print(
         f"EMITTED TO ROOM: {room}"
     )
+    emit(
+        'receive_msg',
+        {
+            'sender_id': 0,
+            'receiver_id': sender_id,
+            'content': f"BOT ERROR: {str(e)}"
+        },
+        room=room
+    )
 @app.errorhandler(Exception)
 def handle_exception(e):
     # Pass response through CORS headers even on error drops
