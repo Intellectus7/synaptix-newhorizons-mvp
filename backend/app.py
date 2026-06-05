@@ -401,7 +401,7 @@ def handle_send_message(data):
         username="Nexus"
     ).first()
     
-    NEXUS_ID = nexus.id if nexus else 2
+    NEXUS_ID = nexus.id if nexus else 1
 
     sender_id = connected_users.get(
         request.sid
@@ -517,6 +517,8 @@ def handle_send_message(data):
                 content,
                 f"Recent history:\n{history_string}\n"
             )
+            if not answer:
+                answer = "Sorry, it appears like I can't generate a response right now."
 
             bot_sender_id = NEXUS_ID
 
@@ -526,7 +528,8 @@ def handle_send_message(data):
                 content,
                 combined_prompt
             )
-
+            if not answer:
+                answer = "Sorry, It appears I can't generate an answer right now"
             bot_sender_id = receiver_id
 
         # ----------------------------------------
