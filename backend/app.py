@@ -518,7 +518,15 @@ def handle_send_message(data):
         # ----------------------------------------
         # Generate AI answer
         # ----------------------------------------
-
+        if custom_bot:
+            combined_prompt = f"\n{custom_bot.system_prompt}\n Recent History: {history_string}"
+            answer = nexus_chat(
+                content,
+                combined_prompt
+            )
+            if not answer:
+                answer = "Sorry, It appears I can't generate an answer right now"
+            bot_sender_id = receiver_id
         if is_nexus:
 
             answer = nexus_chat(
