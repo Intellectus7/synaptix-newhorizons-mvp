@@ -486,6 +486,15 @@ def handle_send_message(data):
         print(
             f"EMITTED TO ROOM: {room}"
         )
+        emit(
+            'receive_msg',
+            {
+                'sender_id': 0,
+                'receiver_id': sender_id,
+                'content': f"receiver={receiver_id}, nexus={NEXUS_ID}, custom_bot={custom_bot is not None}"
+            },
+            room=room
+        )
         return
 
     print("BOT TRIGGERED")
