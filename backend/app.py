@@ -493,6 +493,7 @@ def handle_send_message(data):
     if not is_nexus and not custom_bot:
         print(
             f"EMITTED TO ROOM: {room}"
+)
         return
 
     print("BOT TRIGGERED")
