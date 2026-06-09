@@ -486,7 +486,7 @@ def handle_send_message(data):
         {
             'sender_id': 0,
             'receiver_id': sender_id,
-            'content': f"receiver={receiver_id}, nexus={NEXUS_ID}, custom_bot={custom_bot is not None}"
+            'content': f"receiver={receiver_id}, nexus={NEXUS_ID}, custom_bot={custom_bot is not None}, is_nexus={is_nexus is not None}"
         },
         room=room
     )
