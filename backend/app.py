@@ -475,26 +475,24 @@ def handle_send_message(data):
     # ------------------------------------------------
 
     custom_bot = BotB.query.filter_by(
-        user_id=receiver_id
+        user_id=int(receiver_id)
     ).first()
 
     is_nexus = (
-        receiver_id == NEXUS_ID
+        int(receiver_id) == NEXUS_ID
     )
-
+    emit(
+        'receive_msg',
+        {
+            'sender_id': 0,
+            'receiver_id': sender_id,
+            'content': f"receiver={receiver_id}, nexus={NEXUS_ID}, custom_bot={custom_bot is not None}"
+        },
+        room=room
+    )
     if not is_nexus and not custom_bot:
         print(
             f"EMITTED TO ROOM: {room}"
-        )
-        emit(
-            'receive_msg',
-            {
-                'sender_id': 0,
-                'receiver_id': sender_id,
-                'content': f"receiver={receiver_id}, nexus={NEXUS_ID}, custom_bot={custom_bot is not None}"
-            },
-            room=room
-        )
         return
 
     print("BOT TRIGGERED")
