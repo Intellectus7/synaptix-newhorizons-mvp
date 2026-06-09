@@ -20,6 +20,7 @@ from .models.bot_model import BotB
 from .models.group_model import Group
 from .models.msg_model import Message
 from .bots.Nexus.organizer import nexus_chat
+from .bots.Nexus.answer import answer_query
 from dotenv import load_dotenv
 connected_users = {}
 
@@ -225,7 +226,10 @@ def get_user_info():
     return Success(message="User history loaded", data=response).send()
 
 
-
+@app.route("/test-groq")
+def test_groq():
+    return answer_query("Say hello in one word.")
+    
 @app.route('/users/search', methods=['GET'])
 @jwt_required()
 def get_users():
