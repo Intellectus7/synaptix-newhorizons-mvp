@@ -2,6 +2,7 @@ import os
 from google import genai
 from groq import Groq
 from dotenv import load_dotenv
+from openai import OpenAI
 
 load_dotenv()
 
