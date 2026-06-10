@@ -23,3 +23,5 @@ gevent
 greenlet
 
 python-dotenv==1.1.1
+
+openai
