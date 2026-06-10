@@ -1,21 +1,21 @@
 import os
-from groq import Groq
+from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
-client = Groq() 
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
 
 def answer_query(question):
     try:
-        chat_completions = client.chat.completions.create(
-            messages = [{
-                'role': 'user',
-                'content': question
-    
-            }],
-            model = "llama-3.3-70b-versatile",
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=question
         )
-        return chat_completions.choices[0].message.content
+
+        return response.text
+
     except Exception as error:
-        return f"GROQ ERROR: {str(error)}"
+        return f"GEMINI ERROR: {str(error)}"
