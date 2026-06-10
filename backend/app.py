@@ -494,15 +494,15 @@ def handle_send_message(data):
     is_nexus = (
         int(receiver_id) == NEXUS_ID
     )
-    emit(
-        'receive_msg',
-        {
-            'sender_id': 0,
-            'receiver_id': sender_id,
-            'content': f"receiver={receiver_id}, nexus={NEXUS_ID}, custom_bot={custom_bot is not None}, is_nexus={is_nexus is not None}"
-        },
-        room=room
-    )
+    # emit(
+    #     'receive_msg',
+    #     {
+    #         'sender_id': 0,
+    #         'receiver_id': sender_id,
+    #         'content': f"receiver={receiver_id}, nexus={NEXUS_ID}, custom_bot={custom_bot is not None}, is_nexus={is_nexus is not None}"
+    #     },
+    #     room=room
+    # )
     if not is_nexus and not custom_bot:
         print(
             f"EMITTED TO ROOM: {room}"
