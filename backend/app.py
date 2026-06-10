@@ -76,7 +76,7 @@ def nexus_id():
 
 @app.route("/debug-groq")
 def debug_groq():
-    key = os.getenv("GROQ_API_KEY")
+    key = os.getenv("GEMINI_API_KEY")
 
     return {
         "exists": key is not None,
