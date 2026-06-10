@@ -568,7 +568,7 @@ def handle_send_message(data):
         bot_msg = Message(
             sender_id=bot_sender_id,
             receiver_id=sender_id,
-            content="Hello from Synaptix(remember line 558 of your Github code to fix this)",
+            content=answer,
             timestamp=datetime.utcnow()
         )
 
