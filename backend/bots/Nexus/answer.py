@@ -3,9 +3,9 @@ from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
-
+my_api_key = os.getenv("GEMINI_API_KEY")
 client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
+    api_key=my_api_key
 )
 
 def answer_query(question):
