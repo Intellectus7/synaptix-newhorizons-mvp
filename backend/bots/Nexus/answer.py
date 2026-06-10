@@ -4,14 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = Groq(
-    api_key=os.environ.get("GROQ_API_KEY"),
-    base_url="https://portkey.ai",
-    default_headers={
-        "x-portkey-api-key": os.environ.get("PORTKEY_API_KEY"), # Get from portkey
-        "x-portkey-provider": "groq"
-    }
-) 
+client = Groq() 
 
 def answer_query(question):
     try:
