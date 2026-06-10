@@ -74,6 +74,15 @@ def nexus_id():
         message="Nexus id given"
     ).send()
 
+@app.route("/debug-groq")
+def debug_groq():
+    key = os.getenv("GROQ_API_KEY")
+
+    return {
+        "exists": key is not None,
+        "prefix": key[:8] if key else None
+    }
+
 @app.route("/api/user/saveUser", methods=[POST])
 def save_user():
 
