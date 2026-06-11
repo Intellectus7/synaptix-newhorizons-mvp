@@ -97,7 +97,7 @@ def generate_ai_response(prompt, critical_task=False):
                 messages=[{"role": "user", "content": prompt}],
                 model=model,
                 temperature=0.3,
-                max_tokens=250
+                max_tokens=300
             )
             # FIX: Correct direct property retrieval for standard completions
             return response.choices[0].message.content
