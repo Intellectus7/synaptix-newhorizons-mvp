@@ -38,7 +38,11 @@ uri = os.environ.get("DATABASE_URL")
 if uri and uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False]
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_pre_ping": True,
+    "pool_recycle": 300,
+}
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=300)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=700)
 jwt = JWTManager(app)
