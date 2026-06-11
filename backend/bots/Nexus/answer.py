@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-
 from google import genai
 from groq import Groq
 from openai import OpenAI
@@ -14,11 +13,13 @@ load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 OPEN_ROUTER_API_KEY = os.getenv("OPEN_ROUTER_API_KEY")
+GITHUB_KEY = os.getenv("GITHUB_TOKEN")
 
 required_keys = {
     "GEMINI_API_KEY": GEMINI_API_KEY,
     "GROQ_API_KEY": GROQ_API_KEY,
     "OPEN_ROUTER_API_KEY": OPEN_ROUTER_API_KEY,
+    "GITHUB_TOKEN": GITHUB_TOKEN
 }
 
 for name, value in required_keys.items():
@@ -40,6 +41,10 @@ open_router_client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
 )
 
+github_client = OpenAI(
+    base_url="https://models.inference.ai.azure.com",
+    api_key=GITHUB_TOKEN
+)
 # =========================
 # Models
 # =========================
@@ -48,6 +53,17 @@ GEMINI_MODEL = "gemini-2.5-flash"
 GROQ_MODEL = "llama-3.3-70b-versatile"
 OPENROUTER_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
 
+LOW_TIER_MODELS = [
+    "meta-llama-3.1-8b-instruct",
+    "gpt-4o-mini",
+    "mistral-large-2407", # Low-tier speed variant
+    "cohere-command-r"
+]
+
+HIGH_TIER_MODELS = [
+    "meta-llama-3.3-70b-instruct",
+    "gpt-4o"
+]
 
 # =========================
 # Helpers
@@ -73,7 +89,36 @@ def explain_error(err):
 
     return msg[:200]
 
+def generate_ai_response(prompt, critical_task=False):
+    """
+    Shuffles model selection to distribute requests across separate quotas.
+    If the selected model throws a 429, it tries the next one in the pool.
+    """
+    # Pick high-tier for complex logic, low-tier for fast text processing
+    model_pool = HIGH_TIER_MODELS[:] if critical_task else LOW_TIER_MODELS[:]
+    random.shuffle(model_pool)  # Evenly distributes the 150 RPD / 50 RPD allotments
 
+    for model in model_pool:
+        try:
+            response = client.chat.completions.create(
+                messages=[{"role": "user", "content": prompt}],
+                model=model,
+                temperature=0.3,
+                max_tokens=50
+            )
+            content = response.choices[0].message.content
+            return content
+            
+        except Exception as e:
+            # If a model hits its 15 RPM cap, catch it silently and try another model name
+            if "429" in str(e):
+                print(f"Model {model} hit a rate limit. Switching over...")
+                continue
+            else:
+                print(f"Unexpected error with {model}: {e}")
+                continue
+                
+    return None, "All pooled models exhausted"
 # =========================
 # Providers
 # =========================
@@ -121,9 +166,10 @@ def answer_openrouter(question):
 
 def answer_query(question):
     providers = [
+        ("Github", generate_ai_response),
+        ("OpenRouter", answer_openrouter),
         ("Gemini", answer_gemini),
         ("Groq", answer_groq),
-        ("OpenRouter", answer_openrouter),
     ]
 
     errors = {}
