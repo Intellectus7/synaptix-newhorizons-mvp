@@ -1,4 +1,6 @@
 <script setup>
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const props = defineProps({
     userId: Number,
     isBot: Boolean,
@@ -6,41 +8,47 @@ const props = defineProps({
     avatar: String,
     username: String
 })
+
+function messageUser() {
+  router.push(`/chat/${props.user.id}`)
+}
 </script>
 
 <template>
-    <div class="container">
-        <div class="card">
-            <div class="left">
-                <div class="avatar">
-                    {{ avatar }}
-                </div>
-
-                <div class="info">
-                    <div class="top-row">
-                        <span class="username">
-                            {{ username }}
-                        </span>
-
-                        <span
-                            class="bot-badge"
-                            v-if="isBot"
-                        >
-                            AI
-                        </span>
+    <button @click="messageUser">
+        <div class="container">
+            <div class="card">
+                <div class="left">
+                    <div class="avatar">
+                        {{ avatar }}
                     </div>
-
-                    <p class="last-msg">
-                        {{ lastMsg }}
-                    </p>
+    
+                    <div class="info">
+                        <div class="top-row">
+                            <span class="username">
+                                {{ username }}
+                            </span>
+    
+                            <span
+                                class="bot-badge"
+                                v-if="isBot"
+                            >
+                                AI
+                            </span>
+                        </div>
+    
+                        <p class="last-msg">
+                            {{ lastMsg }}
+                        </p>
+                    </div>
                 </div>
-            </div>
-
-            <div class="chevron">
-                →
+    
+                <div class="chevron">
+                    →
+                </div>
             </div>
         </div>
-    </div>
+    </button>
 </template>
 
 <style scoped>
