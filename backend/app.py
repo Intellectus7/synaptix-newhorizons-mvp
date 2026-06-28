@@ -318,6 +318,7 @@ def get_user_messages():
         msg_dict["is_ai"] = (BotB.query.filter_by(user_id=int(other_user.id)).first() is not None) # Check the bot table to see if it's a bot
         is_ai = msg_dict["is_ai"]
         msg_dict["profile_pic"] = "🤖" if msg_dict["is_ai"] else "🧑🏻"
+        last_message = ""
         if other_user.id in past_chats:
             pass
         else:
