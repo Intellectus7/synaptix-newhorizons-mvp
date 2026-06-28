@@ -318,7 +318,9 @@ def get_user_messages():
         msg_dict["is_ai"] = (BotB.query.filter_by(user_id=int(other_user.id)).first() is not None) # Check the bot table to see if it's a bot
         is_ai = msg_dict["is_ai"]
         msg_dict["profile_pic"] = "🤖" if msg_dict["is_ai"] else "🧑🏻"
-        last_message = ""
+        last_message = msg.content
+        if len(last_message) > 35:
+            last_message = last_message[:35] + "..."
         if other_user.id in past_chats:
             pass
         else:
@@ -328,7 +330,7 @@ def get_user_messages():
             "username": other_user.username,
             "is_ai": is_ai,
             "profile_pic": "🤖" if is_ai else "🧑🏻",
-            "last_message": msg.message,
+            "last_message": last_message,
             "timestamp": msg.timestamp,
             "is_read": msg_dict["is_read"],
             "is_me": msg.sender_id == current_user_id
