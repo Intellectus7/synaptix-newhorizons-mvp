@@ -294,6 +294,49 @@ def refresh():
         status_code=201
     ).send()
 
+@app.route('/getSidebarInfo', methods=['GET'])
+@jwt_required()
+def get_user_messages():
+    current_user_id = int(get_jwt_identity())
+    conversations = Message.query.filter(or_(
+        Message.sender_id == current_user_id,
+        Message.receiver_id == current_user_id
+    )).order_by(Message.timestamp.desc()).all()
+    serialized_msgs = []
+    past_chats = set()
+    for msg in conversations:
+        msg_dict = msg.to_dict()
+        msg_dict['is_me'] = (msg.sender_id == current_user_id)
+        if msg_dict['is_me'] is True:
+            msg_dict['other_user'] = msg.receiver_id
+        else:
+            msg_dict['other_user'] = msg.sender_id
+        if msg_dict["is_read"] is None:
+            msg_dict["is_read"] = False
+        other_user = User.query.get(msg_dict['other_user'])
+        msg_dict["username"] = other_user.username
+        msg_dict["is_ai"] = (BotB.query.filter_by(user_id=int(other_user.id)).first() is not None) # Check the bot table to see if it's a bot
+        is_ai = msg_dict["is_ai"]
+        msg_dict["profile_pic"] = "🤖" if msg_dict["is_ai"] else "🧑🏻"
+        if other_user.id in past_chats:
+            pass
+        else:
+            past_chats.add(other_user.id)
+            serialized_msgs.append({
+            "other_user": other_user.id,
+            "username": other_user.username,
+            "is_ai": is_ai,
+            "profile_pic": "🤖" if is_ai else "🧑🏻",
+            "last_message": msg.message,
+            "timestamp": msg.timestamp,
+            "is_read": msg_dict["is_read"],
+            "is_me": msg.sender_id == current_user_id
+})
+    response = {
+        'conversations': serialized_msgs
+    }
+    return Success(message="Loaded user conversations", data=response).send()
+    
 @app.route('/bots/create', methods=[POST])
 @jwt_required()
 def create_bot():
