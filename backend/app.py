@@ -669,7 +669,8 @@ def handle_exception(e):
     print(f"Exception: { e }")
     response = jsonify({"message": str(e)})
     origin = request.headers.get("Origin")
-    
+    if not origin:
+        origin = ALLOWED_ORIGINS[1]
     if origin in ALLOWED_ORIGINS:
         response.headers["Access-Control-Allow-Origin"] = origin
     
