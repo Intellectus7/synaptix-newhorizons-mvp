@@ -667,6 +667,13 @@ def handle_send_message(data):
             },
             room=room
         )
+
+
+@app.after_request
+def debug_headers(response):
+    print("CORS:", response.headers.get("Access-Control-Allow-Origin"))
+    return response
+    
 @app.errorhandler(Exception)
 def handle_exception(e):
     # Pass response through CORS headers even on error drops
