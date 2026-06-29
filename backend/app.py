@@ -317,6 +317,7 @@ def get_user_messages():
             msg_dict['other_user'] = msg.sender_id
         if msg_dict["is_read"] is None:
             msg_dict["is_read"] = False
+        msg_dict["is_read"] = msg_dict.get("is_read", False)
         other_user = User.query.get(msg_dict['other_user'])
         msg_dict["username"] = other_user.username
         msg_dict["is_ai"] = (BotB.query.filter_by(user_id=int(other_user.id)).first() is not None) # Check the bot table to see if it's a bot
