@@ -684,7 +684,7 @@ def handle_exception(e):
         origin = ALLOWED_ORIGINS[1]
     if origin in ALLOWED_ORIGINS:
         response.headers["Access-Control-Allow-Origin"] = origin
-    
+    response.headers["Access-Control-Allow-Origin"] = "https://syncaptix-node.surge.sh"
     response.headers["Access-Control-Allow-Credentials"] = "true"
     return response, 500
 
