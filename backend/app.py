@@ -668,7 +668,8 @@ def handle_exception(e):
     # Pass response through CORS headers even on error drops
     print(f"Exception: { e }")
     response = jsonify({"message": str(e)})
-    response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+    for item in ALLOWED_ORIGINS:
+        response.headers.add("Access-Control-Allow-Origin", item)
     response.headers.add("Access-Control-Allow-Credentials", "true")
     return response, 500
 
