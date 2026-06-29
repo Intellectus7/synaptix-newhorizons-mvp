@@ -176,6 +176,10 @@ def login():
     ).send()
 
 
+@app.route("/cors-test")
+def cors_test():
+    return jsonify({"hello": "world"})
+
 @app.route('/profile', methods=[GET, "PREFLIGHT"])
 @jwt_required()
 def profile():
