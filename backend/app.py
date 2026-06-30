@@ -337,7 +337,7 @@ def get_user_messages():
             "profile_pic": "🤖" if is_ai else "🧑🏻",
             "last_message": last_message,
             "timestamp": msg.timestamp,
-            "is_read": msg_dict["is_read"],
+ #           "is_read": msg_dict["is_read"],
             "is_me": msg.sender_id == current_user_id
 })
     response = {
